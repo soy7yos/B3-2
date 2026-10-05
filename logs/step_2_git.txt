@@ -5,21 +5,5 @@ sysy22042026@c6r1s1 B3-2 % python3 main.py commit
   ?? git_utils.py
 sysy22042026@c6r1s1 B3-2 % cd "$(mktemp -d)" && python3 /Users/sysy22042026/B3-2/main.py commit; cd /Users/sysy22042026/B3-2
 [ERROR] git 저장소가 아닙니다. 변경 사항이 있는 git 프로젝트 폴더에서 실행하세요.
-sysy22042026@c6r1s1 B3-2 % git stash -u
-Saved working directory and index state WIP on feat/step-2: 69dcc63 feat: argparse로 commit/pr 서브명령과 API 옵션 CLI 뼈대 추가
 sysy22042026@c6r1s1 B3-2 % python3 main.py commit
-command=commit model=gemini-2.5-flash temperature=0.3 max_tokens=512 safe_mode=False
-sysy22042026@c6r1s1 B3-2 % git stash pop
-현재 브랜치 feat/step-2
-커밋하도록 정하지 않은 변경 사항:
-  (무엇을 커밋할지 바꾸려면 "git add <파일>..."을 사용하십시오)
-  (use "git restore <file>..." to discard changes in working directory)
-        수정함:        main.py
-
-추적하지 않는 파일:
-  (커밋할 사항에 포함하려면 "git add <파일>..."을 사용하십시오)
-        git_utils.py
-
-커밋할 변경 사항을 추가하지 않았습니다 ("git add" 및/또는 "git commit -a"를
-사용하십시오)
-Dropped refs/stash@{0} (9627c81b6e8fa340c278dfc14843d9787b244bdb)
+[INFO] 변경 사항이 없습니다. 파일을 수정한 뒤 다시 실행하세요.
