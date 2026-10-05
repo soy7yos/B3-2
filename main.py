@@ -1,4 +1,7 @@
 import argparse
+import sys
+
+from git_utils import GitError, collect_changes
 
 # 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고, 8단계 실험 때 바꿀 곳이 한 군데다.
 DEFAULT_MODEL = "gemini-2.5-flash"  # 4단계에서 3 Flash와 비교해 확정
@@ -28,9 +31,22 @@ def build_parser():
 
 def main():
     args = build_parser().parse_args()
-    # 1단계 검증용 출력. 2단계부터 git 수집으로 이어지며 이 줄은 교체된다.
-    print(f"command={args.command} model={args.model} temperature={args.temperature} "
-          f"max_tokens={args.max_tokens} safe_mode={args.safe_mode}")
+    try:
+        branch, files, diff = collect_changes()
+    except GitError as e:
+        print(f"[ERROR] {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # 왜: "변경 없음"은 status 기준으로 판정한다. untracked만 있으면 diff는 비어도 변경은 있다.
+    if not files:
+        print("[INFO] 변경 사항이 없습니다. 파일을 수정한 뒤 다시 실행하세요.")
+        return
+
+    print(f"[INFO] 현재 브랜치: {branch}")
+    print(f"[INFO] 변경 파일 {len(files)}개, diff {len(diff.splitlines())}줄 수집")
+    for line in files:
+        print(f"  {line}")
+    # 3단계 이후: safe-mode → API 호출로 이어진다. args는 그때 쓴다.
 
 
 if __name__ == "__main__":
