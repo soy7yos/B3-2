@@ -3,6 +3,7 @@ import sys
 
 from ai_client import AIError, call_ai, load_api_key
 from git_utils import GitError, collect_changes
+from prompts import COMMIT_PROMPT
 from safe_mode import mask_sensitive
 
 # 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고, 8단계 실험 때 바꿀 곳이 한 군데다.
@@ -57,12 +58,25 @@ def main():
     # 왜: 키 검사는 git 수집 뒤, API 호출 앞에서 한다. 키가 없으면 호출 없이 바로 끝낸다.
     try:
         api_key = load_api_key()
-        # 5·6단계에서 commit/pr 전용 프롬프트로 바꾼다. 4단계는 호출 경로 검증용 임시 프롬프트.
-        result = call_ai(f"다음 diff를 한 줄로 요약해줘:\n{diff}", api_key, args.model, args.temperature, args.max_tokens)
+        # 왜: commit과 pr이 수집·마스킹·호출 경로를 공유하고 프롬프트만 갈린다.
+        if args.command == "commit":
+            prompt = COMMIT_PROMPT.format(files="\n".join(files), diff=diff)
+        else:
+            # 6단계에서 pr 전용 프롬프트로 바꾼다. 그 전까지는 호출 경로 검증용 임시 프롬프트.
+            prompt = f"다음 diff를 한 줄로 요약해줘:\n{diff}"
+        result = call_ai(prompt, api_key, args.model, args.temperature, args.max_tokens)
     except AIError as e:
         print(f"[ERROR] {e}", file=sys.stderr)
         sys.exit(1)
-    print(result)
+
+    if args.command == "commit":
+        print("[DONE] 커밋 메시지 생성 완료\n")
+        # 왜: 구분선으로 결과 영역을 나눠 복사할 범위를 분명히 한다. 정식 포맷 검증·구획은 7단계에서 한다.
+        print("--- Commit Message ---")
+        print(result)
+        print("----------------------")
+    else:
+        print(result)
 
 
 if __name__ == "__main__":
