@@ -9,8 +9,7 @@ def _run(*args):
     # 왜: 한글 파일명이 status에서 "\355..." 같은 이스케이프로 나오지 않게 quotepath를 끄고,
     #     Windows 기본 인코딩(cp949)으로 diff가 깨지지 않게 utf-8로 읽는다.
     try:
-        return subprocess.run(["git", "-c", "core.quotepath=false", *args],
-                              capture_output=True, text=True, encoding="utf-8")
+        return subprocess.run(["git", "-c", "core.quotepath=false", *args], capture_output=True, text=True, encoding="utf-8")
     except FileNotFoundError:
         raise GitError("git을 찾을 수 없습니다. git을 설치한 뒤 다시 실행하세요.")
 

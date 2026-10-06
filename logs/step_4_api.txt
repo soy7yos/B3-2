@@ -1,0 +1,48 @@
+# ① 키 없음
+sysy22042026@c6r1s1 B3-2 % unset AI_API_KEY
+python3 main.py commit
+[INFO] 현재 브랜치: feat/step-4
+[INFO] 변경 파일 5개, diff 65줄 수집
+   M .env.example
+   M git_utils.py
+   M main.py
+  ?? ai_client.py
+  ?? logs/step_4_api.txt
+[ERROR] 환경변수 AI_API_KEY가 설정되지 않았습니다.
+예) export AI_API_KEY=발급받은키        (Mac/Linux)
+예) $env:AI_API_KEY="발급받은키"        (PowerShell)
+
+# ② 틀린 키
+sysy22042026@c6r1s1 B3-2 % export AI_API_KEY="wrong-key"
+python3 main.py commit
+[INFO] 현재 브랜치: feat/step-4
+[INFO] 변경 파일 5개, diff 65줄 수집
+   M .env.example
+   M git_utils.py
+   M main.py
+  ?? ai_client.py
+  ?? logs/step_4_api.txt
+[INFO] AI API 호출 1회
+[ERROR] 인증 실패(HTTP 400): API 키가 올바른지 확인하세요. API key not valid. Please pass a valid API key.
+
+# ③ 정상 키
+sysy22042026@c6r1s1 B3-2 % export AI_API_KEY=***
+python3 main.py commit
+python3 main.py commit --model gemini-3.8-flash
+[INFO] 현재 브랜치: feat/step-4
+[INFO] 변경 파일 5개, diff 65줄 수집
+   M .env.example
+   M git_utils.py
+   M main.py
+  ?? ai_client.py
+  ?? logs/step_4_api.txt
+[INFO] AI API 호출 1회
+AI API 키 설정 추가, 기본 모델 변경(`gemini-3.5-flash-lite`), 그리고 `main.py`에 AI 호출 및 결과 출력 로직 연동.
+[INFO] 현재 브랜치: feat/step-4
+[INFO] 변경 파일 5개, diff 65줄 수집
+   M .env.example
+   M git_utils.py
+   M main.py
+  ?? ai_client.py
+  ?? logs/step_4_api.txt
+[INFO] AI API 호출 1회
