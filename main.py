@@ -2,6 +2,7 @@ import argparse
 import sys
 
 from git_utils import GitError, collect_changes
+from safe_mode import mask_sensitive
 
 # 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고, 8단계 실험 때 바꿀 곳이 한 군데다.
 DEFAULT_MODEL = "gemini-2.5-flash"  # 4단계에서 3 Flash와 비교해 확정
@@ -46,8 +47,11 @@ def main():
     print(f"[INFO] 변경 파일 {len(files)}개, diff {len(diff.splitlines())}줄 수집")
     for line in files:
         print(f"  {line}")
-    # 3단계 이후: safe-mode → API 호출로 이어진다. args는 그때 쓴다.
+    # 왜: 마스킹은 API 호출 직전이 아니라 수집 직후에 한다. 이후 어떤 코드도 원문 diff를 못 만지게 해 유출 경로를 줄인다.
+    if args.safe_mode:
+        diff, masked = mask_sensitive(diff)
+        print(f"[INFO] safe-mode ON: 민감정보 {masked}건 마스킹")
+    # 4단계 이후: API 호출로 이어진다.
 
 
 if __name__ == "__main__":
-    main()

@@ -1,0 +1,31 @@
+sysy22042026@c6r1s1 B3-2 % python3 safe_mode.py
+--- OFF (원문) ---
++API_KEY = "AIzaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
++# 문의: dev.kim@example.com, 010-1234-5678, 02-123-4567
++def add(a, b): return a + b
+
+--- ON (마스킹 4건) ---
++API_KEY = "[MASKED_API_KEY]"
++# 문의: [MASKED_EMAIL], [MASKED_PHONE], [MASKED_PHONE]
++def add(a, b): return a + b
+
+OK
+sysy22042026@c6r1s1 B3-2 % echo "# AI_API_KEY=AIza$(python3 -c "print('A'*35)") mail: a@b.com 010-1234-5678" >> main.py
+sysy22042026@c6r1s1 B3-2 % python3 main.py commit
+[INFO] 현재 브랜치: main
+[INFO] 변경 파일 3개, diff 28줄 수집
+   M main.py
+  ?? logs/step_3_safe_mode.txt
+  ?? safe_mode.py
+sysy22042026@c6r1s1 B3-2 % python3 main.py commit --safe-mode
+[INFO] 현재 브랜치: main
+[INFO] 변경 파일 3개, diff 28줄 수집
+   M main.py
+  ?? logs/step_3_safe_mode.txt
+  ?? safe_mode.py
+[INFO] safe-mode ON: 민감정보 3건 마스킹
+sysy22042026@c6r1s1 B3-2 % sed -i '' '$d' main.py
+sysy22042026@c6r1s1 B3-2 % tail -n 3 main.py
+
+
+if __name__ == "__main__":
