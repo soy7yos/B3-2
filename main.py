@@ -3,7 +3,7 @@ import sys
 
 from ai_client import AIError, call_ai, load_api_key
 from git_utils import GitError, collect_changes
-from prompts import COMMIT_PROMPT
+from prompts import COMMIT_PROMPT, PR_PROMPT
 from safe_mode import mask_sensitive
 
 # 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고, 8단계 실험 때 바꿀 곳이 한 군데다.
@@ -62,8 +62,7 @@ def main():
         if args.command == "commit":
             prompt = COMMIT_PROMPT.format(files="\n".join(files), diff=diff)
         else:
-            # 6단계에서 pr 전용 프롬프트로 바꾼다. 그 전까지는 호출 경로 검증용 임시 프롬프트.
-            prompt = f"다음 diff를 한 줄로 요약해줘:\n{diff}"
+            prompt = PR_PROMPT.format(files="\n".join(files), diff=diff)
         result = call_ai(prompt, api_key, args.model, args.temperature, args.max_tokens)
     except AIError as e:
         print(f"[ERROR] {e}", file=sys.stderr)
@@ -76,7 +75,14 @@ def main():
         print(result)
         print("----------------------")
     else:
-        print(result)
+        print("[DONE] PR 초안 생성 완료\n")
+        # 왜: PR은 제목 1줄 + 본문이라 구획을 둘로 나눈다. 첫 줄바꿈 기준 분리는 프롬프트가 "첫 줄=제목"을 강제하기 때문이다. 어긋났을 때의 검증·보정은 7단계에서 한다.
+        title, _, body = result.strip().partition("\n")
+        print("--- PR Title ---")
+        print(title)
+        print("\n--- PR Body ---")
+        print(body.strip())
+        print("----------------")
 
 
 if __name__ == "__main__":
