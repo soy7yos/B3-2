@@ -1,0 +1,230 @@
+=== pr --temperature 0 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+feat: AI 클라이언트에 재시도 가능 여부 판단 함수 추가
+
+--- PR Body ---
+## Why
+- AI API 호출 중 일시적인 서버 오류나 요청 제한(Rate Limit)이 발생했을 때 재시도 여부를 판단할 수 있는 공통 로직이 필요했습니다.
+
+## What
+- HTTP 상태 코드를 입력받아 재시도 가능 여부를 반환하는 `is_retryable(status_code)` 함수를 추가했습니다.
+- 대상 상태 코드는 429(Too Many Requests), 500(Internal Server Error), 503(Service Unavailable)입니다.
+
+## How to Test
+- Python 인터프리터를 실행하여 아래와 같이 함수가 올바르게 동작하는지 확인합니다.
+```python
+from ai_client import is_retryable
+assert is_retryable(429) == True
+assert is_retryable(500) == True
+assert is_retryable(503) == True
+assert is_retryable(400) == False
+```
+----------------
+=== pr --temperature 0 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+fix: AI 응답 실패 시 재시도 가능 여부 판단 함수 추가
+
+--- PR Body ---
+## Why
+- AI API 호출 중 일시적인 서버 오류나 요청 제한 발생 시 재시도 로직을 구현하기 위해 HTTP 상태 코드를 기반으로 재시도 가능 여부를 판별하는 유틸리티 함수가 필요해졌습니다.
+
+## What
+- `ai_client.py` 파일에 HTTP 상태 코드(429, 500, 503)를 받아 재시도 가능 여부를 반환하는 `is_retryable` 함수를 추가했습니다.
+
+## How to Test
+- Python 인터프리터나 테스트 코드를 통해 `is_retryable` 함수가 올바르게 동작하는지 확인합니다.
+```python
+from ai_client import is_retryable
+print(is_retryable(429))  # True
+print(is_retryable(500))  # True
+print(is_retryable(503))  # True
+print(is_retryable(400))  # False
+```
+----------------
+=== pr --temperature 1 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+feat: AI 클라이언트에 재시도 가능 여부 판단 함수 추가
+
+--- PR Body ---
+## Why
+- AI API 호출 중 일시적인 서버 오류나 요청 제한(Rate Limit)이 발생했을 때 재시도 여부를 판별할 로직이 필요함.
+
+## What
+- HTTP 상태 코드를 받아 재시도 가능 여부를 반환하는 `is_retryable` 함수 추가 (대상 상태 코드: 429, 500, 503)
+
+## How to Test
+- Python 인터프리터를 실행하거나 테스트 코드를 통해 `is_retryable` 함수를 호출해 확인
+```python
+from ai_client import is_retryable
+assert is_retryable(429) == True
+assert is_retryable(500) == True
+assert is_retryable(503) == True
+assert is_retryable(400) == False
+```
+----------------
+=== pr --temperature 1 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+feat: AI API 호출을 위한 재시도 가능 상태 코드 확인 함수 추가
+
+--- PR Body ---
+## Why
+- AI 서비스 호출 중 일시적인 서버 오류나 요청 제한으로 인해 실패하는 경우, 재시도 여부를 판단할 수 있는 로직이 필요했습니다.
+
+## What
+- `ai_client.py`에 HTTP 상태 코드를 받아 재시도 가능 여부를 반환하는 `is_retryable(status_code)` 함수 추가
+- 대상 상태 코드: 429(Too Many Requests), 500(Internal Server Error), 503(Service Unavailable)
+
+## How to Test
+- Python 인터프리터나 테스트 스크립트에서 함수를 임포트하여 확인합니다.
+- `python -c "from ai_client import is_retryable; print(is_retryable(429)); print(is_retryable(200))"` 실행 시 `True`, `False`가 출력되는지 확인합니다.
+----------------
+=== pr --temperature 2 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+feat: AI API 호출 시 재시도 가능한 HTTP 상태 코드 판단 함수 추가
+
+--- PR Body ---
+## Why
+- AI 서비스 호출 중 일시적인 서버 오류나 요청 제한으로 인해 실패했을 때, 재시도 여부를 판단할 수 있는 로직이 필요했습니다.
+
+## What
+- `ai_client.py`에 주어진 HTTP 상태 코드가 재시도 대상(429, 500, 503)인지 확인하는 `is_retryable(status_code)` 함수를 추가했습니다.
+
+## How to Test
+- Python 인터프리터를 실행하여 아래 명령어로 함수가 올바르게 동작하는지 확인합니다.
+```python
+from ai_client import is_retryable
+print(is_retryable(429))  # True
+print(is_retryable(200))  # False
+```
+----------------
+=== pr --temperature 2 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+fix: AI 응답 실패 시 재시도 가능 여부 판단 함수 추가
+
+--- PR Body ---
+## Why
+- API 호출 중 발생한 오류의 상태 코드를 바탕으로 재시도 가능 여부를 판별하는 로직이 필요하여 유틸리티 함수를 추가했습니다.
+
+## What
+- `ai_client.py`에 HTTP 상태 코드(429, 500, 503)를 받아 재시도 가능 여부를 불리언 값으로 반환하는 `is_retryable` 함수를 추가했습니다.
+
+## How to Test
+- Python 인터프리터를 실행하거나 테스트 코드를 통해 아래와 같이 함수가 올바르게 동작하는지 확인합니다.
+- `python -c "from ai_client import is_retryable; print(is_retryable(429)); print(is_retryable(200))"`
+- `429`, `500`, `503` 입력 시 `True`를 반환하고, 그 외의 상태 코드 입력 시 `False`를 반환하는지 확인합니다.
+----------------
+=== pr --temperature 0.3 --max-tokens 64 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+feat: AI 클라이언트에 재시도 가능 여부 판단 함수 추가
+
+--- PR Body ---
+## Why
+- AI API 호출 중 일시적인 서버 오류나 요청 제한(Rate Limit)이 발생했을 때 재시도 여부를 판단할 수 있는 로직이 필요했습니다.
+
+## What
+-
+- (AI가 내용을 만들지 못함 - 직접 작성 필요)
+
+## How to Test
+- (AI가 내용을 만들지 못함 - 직접 작성 필요)
+----------------
+[WARN] 'What' 섹션에 불릿이 없어 추가했습니다
+[WARN] 'How to Test' 섹션이 없어 추가했습니다
+=== pr --temperature 0.3 --max-tokens 256 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+fix: AI 클라이언트에 재시도 가능한 HTTP 상태 코드 확인 함수 추가
+
+--- PR Body ---
+## Why
+- AI API 호출 중 일시적인 서버 오류나 요청 제한으로 인해 실패했을 때, 재시도 여부를 판단할 수 있는 공통 로직이 필요했습니다.
+
+## What
+- `ai_client.py`에 `is_retryable` 함수 추가
+- HTTP 상태 코드 429(Too Many Requests), 500(Internal Server Error), 503(Service Unavailable)인 경우 재시도 가능하도록 설정
+
+## How to Test
+- python 인터프리터 또는 테스트 코드를 실행하여 `is_retryable` 함수를 호출합니다.
+```python
+from ai_client import is_retryable
+print(is_retryable(429))  # True
+print(is_retryable(500))  # True
+print(is_retryable(503))  # True
+print(is_retryable(400))  # False
+```
+----------------
+=== pr --temperature 0.3 --max-tokens 1024 ===
+[INFO] 현재 브랜치: feat/step-8
+[INFO] 변경 파일 1개, diff 15줄 수집
+   M ai_client.py
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+feat: AI 클라이언트에 재시도 가능 여부 판단 함수 추가
+
+--- PR Body ---
+## Why
+- AI API 호출 중 일시적인 서버 오류나 요청 제한(Rate Limit)이 발생했을 때, 해당 오류가 재시도할 수 있는 성격인지 판별하는 로직이 필요하여 변경을 진행했습니다.
+
+## What
+- `ai_client.py`에 HTTP 상태 코드를 받아 재시도 가능 여부를 반환하는 `is_retryable` 함수를 추가했습니다.
+- 재시도 대상 상태 코드로 429(Too Many Requests), 500(Internal Server Error), 503(Service Unavailable)을 지정했습니다.
+
+## How to Test
+- Python 인터프리터를 실행하여 함수가 올바르게 동작하는지 확인합니다.
+```python
+from ai_client import is_retryable
+print(is_retryable(429))  # True
+print(is_retryable(500))  # True
+print(is_retryable(503))  # True
+print(is_retryable(400))  # False
+```
+----------------
