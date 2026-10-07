@@ -37,7 +37,7 @@ def format_pr(result):
         title = truncate(title, PR_MAX)
         notes.append(f"제목이 {PR_MAX}자를 넘어 잘랐습니다")
 
-    # 왜: `## ` 헤더로 섹션을 쪼갠다(이해 결정: 자유 텍스트 + 헤더 파싱). 대소문자는 무시한다.
+    # 왜: `## ` 헤더로 섹션을 쪼갠다(응답은 자유 텍스트로 받고 헤더로 파싱). 대소문자는 무시한다.
     found, current = {}, None
     for line in lines[1:]:
         s = line.strip()

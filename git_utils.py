@@ -17,13 +17,15 @@ def _run(*args):
 def collect_changes():
     """(현재 브랜치, 변경 파일 목록, diff 텍스트)를 돌려준다. 변경이 없으면 파일 목록이 빈 리스트."""
     # 왜: git 원문 에러(fatal: not a git repository)는 비개발자가 원인을 읽기 어려워 따로 안내한다.
-    #     returncode로 판정해 git 언어 설정(한글 메시지)에 영향받지 않는다.
-    if _run("rev-parse", "--is-inside-work-tree").returncode != 0:
+    #     status가 실패(returncode != 0)하면 저장소 아님으로 판정한다. 별도 확인 명령 없이 §7 status·diff 범위를 지키고,
+    #     git 언어 설정(한글 메시지)에도 영향받지 않는다.
+    status = _run("status", "--short", "--branch")
+    if status.returncode != 0:
         raise GitError("git 저장소가 아닙니다. 변경 사항이 있는 git 프로젝트 폴더에서 실행하세요.")
 
     # 왜: --short --branch는 첫 줄이 "## 브랜치...", 나머지가 파일별 한 줄이라 파싱이 쉽고,
-    #     추가 git 명령 없이 브랜치명까지 얻는다(§7 status·diff 범위 유지).
-    lines = _run("status", "--short", "--branch").stdout.splitlines()
+    #     추가 git 명령 없이 브랜치명까지 얻는다.
+    lines = status.stdout.splitlines()
     branch = lines[0][3:].split("...")[0]
     files = lines[1:]
 

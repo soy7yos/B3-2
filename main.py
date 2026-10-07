@@ -7,7 +7,7 @@ from format_output import format_commit, format_pr
 from prompts import COMMIT_PROMPT, PR_PROMPT
 from safe_mode import limit_diff, mask_sensitive
 
-# 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고, 8단계 실험 때 바꿀 곳이 한 군데다.
+# 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고 바꿀 곳이 한 군데다.
 # 왜: 2.5 계열은 신규 키 접근이 제한되고 3 Flash는 프리뷰다. 3.5 Flash-Lite는 안정 버전이고 무료 한도가 하루 500회로 가장 넉넉하다.
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
 DEFAULT_TEMPERATURE = 0.3  # 왜: 커밋 메시지는 창의성보다 일관성이 중요해 낮게 둔다
