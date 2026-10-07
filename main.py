@@ -5,13 +5,16 @@ from ai_client import AIError, call_ai, load_api_key
 from git_utils import GitError, collect_changes
 from format_output import format_commit, format_pr
 from prompts import COMMIT_PROMPT, PR_PROMPT
-from safe_mode import mask_sensitive
+from safe_mode import limit_diff, mask_sensitive
 
 # 왜: 기본값을 상수로 모아 두면 --help와 코드가 같은 값을 쓰고, 8단계 실험 때 바꿀 곳이 한 군데다.
 # 왜: 2.5 계열은 신규 키 접근이 제한되고 3 Flash는 프리뷰다. 3.5 Flash-Lite는 안정 버전이고 무료 한도가 하루 500회로 가장 넉넉하다.
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
 DEFAULT_TEMPERATURE = 0.3  # 왜: 커밋 메시지는 창의성보다 일관성이 중요해 낮게 둔다
 DEFAULT_MAX_TOKENS = 512  # 왜: 커밋 메시지·PR 초안은 짧다. 단 thinking 토큰도 이 상한에 포함되므로, 응답이 잘리면(MAX_TOKENS) 이 값을 올린다
+# 왜: 명세 예시(최대 10개 파일·200줄)를 기본값으로 두고, 옵션으로 조정할 수 있게 한다.
+SAFE_MAX_FILES = 10
+SAFE_MAX_LINES = 200
 
 
 def build_parser():
@@ -24,7 +27,11 @@ def build_parser():
                         help="응답 최대 토큰 수 (기본: %(default)s)")
     # 왜: 결정대로 기본 OFF, 플래그를 주면 ON. store_true가 그 의미와 맞는다.
     common.add_argument("--safe-mode", action="store_true",
-                        help="diff의 API 키·이메일·전화번호를 마스킹해서 전송")
+                        help="diff의 API 키·비밀번호·토큰·이메일·주민번호·전화번호를 마스킹하고 파일·줄 수를 제한해서 전송")
+    common.add_argument("--max-files", type=int, default=SAFE_MAX_FILES,
+                        help="--safe-mode에서 전송할 최대 파일 수 (기본: %(default)s)")
+    common.add_argument("--max-lines", type=int, default=SAFE_MAX_LINES,
+                        help="--safe-mode에서 전송할 최대 diff 줄 수 (기본: %(default)s)")
     # 왜: 컨벤션을 코드가 아닌 텍스트 파일로 받으면 팀마다 파일만 바꿔 끼우면 된다. yaml은 외부 라이브러리라 표준 라이브러리 텍스트 읽기로 충분하다.
     common.add_argument("--convention", metavar="FILE",
                         help="팀 컨벤션 텍스트 파일 (프롬프트에 추가 규칙으로 포함)")
@@ -39,6 +46,10 @@ def build_parser():
 
 def main():
     args = build_parser().parse_args()
+    # 왜: 0 이하면 diff가 통째로 비어 AI가 엉뚱한 답을 내므로, git·API 앞에서 막는다.
+    if args.max_files < 1 or args.max_lines < 1:
+        print("[ERROR] --max-files와 --max-lines는 1 이상이어야 합니다.", file=sys.stderr)
+        sys.exit(1)
     convention = ""
     if args.convention:
         # 왜: 파일 오류는 git 수집·API 호출 전에 걸러 쓸데없는 호출을 막는다.
@@ -68,6 +79,12 @@ def main():
         print(f"  {line}")
     # 왜: 마스킹은 API 호출 직전이 아니라 수집 직후에 한다. 이후 어떤 코드도 원문 diff를 못 만지게 해 유출 경로를 줄인다.
     if args.safe_mode:
+        # 왜: 제한을 먼저 걸고 마스킹한다. 전송될 부분만 마스킹하니 건수가 실제 전송 내용 기준이 된다.
+        diff, cut_files, cut_lines = limit_diff(diff, args.max_files, args.max_lines)
+        if cut_files or cut_lines:
+            # 왜: 잘렸다는 사실을 프롬프트에 남겨야 AI가 전체 변경으로 착각하지 않는다.
+            diff += f"\n[safe-mode 제한으로 파일 {cut_files}개·{cut_lines}줄 생략됨]\n"
+            print(f"[INFO] safe-mode 제한: 파일 {cut_files}개·{cut_lines}줄 생략 (최대 {args.max_files}파일/{args.max_lines}줄)")
         diff, masked = mask_sensitive(diff)
         print(f"[INFO] safe-mode ON: 민감정보 {masked}건 마스킹")
 
