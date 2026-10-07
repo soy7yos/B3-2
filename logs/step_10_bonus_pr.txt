@@ -1,0 +1,43 @@
+PS G:\내 드라이브\Codyssey\02_AI_Tools\B1-1> python ../B3-2/main.py commit
+>> python ../B3-2/main.py pr
+[INFO] 현재 브랜치: docs/readme-structure
+[INFO] 변경 파일 1개, diff 18줄 수집
+  M  README.md
+[INFO] AI API 호출 1회
+[DONE] 커밋 메시지 생성 완료
+
+--- Commit Message ---
+docs: README에 프로젝트 파일 구조 설명 추가
+
+- README.md 파일에 주요 파일 및 디렉토리 구조 설명 추가
+----------------------
+[INFO] 현재 브랜치: docs/readme-structure
+[INFO] 변경 파일 1개, diff 18줄 수집
+  M  README.md
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+docs: README에 프로젝트 구조 안내 추가
+
+--- PR Body ---
+## Why
+- 프로젝트를 처음 접하거나 코드를 파악하는 사용자가 전체 파일 및 디렉토리 구성을 한눈에 파악할 수 있도록 안내하기 위함입니다.
+
+## What
+- `README.md`에 `## 프로젝트 구조` 섹션을 추가했습니다.
+- 주요 파일(`index.html`, `style.css`, `main.js`)과 디렉토리(`images/`, `logs/`)의 역할을 요약하여 기술했습니다.
+
+## How to Test
+- 저장소 루트 디렉토리의 `README.md` 파일을 엽니다.
+- `## 프로젝트 구조` 섹션이 올바르게 추가되었고 파일 설명이 정확한지 마크다운 뷰어로 확인합니다.
+----------------
+
+[AI 초안 → 최종 PR 변경점]
+1. 제목: AI 초안 `docs: README에 프로젝트 구조 안내 추가`를 그대로 사용. prefix(docs)와 범위가 변경 내용과 맞고 50자 이내라 고칠 이유가 없었음.
+2. Why: "…안내하기 위함입니다."를 "…안내한다."로 수정. 문장이 길고 "~입니다" 어투가 이 repo README의 평서형(~다) 톤과 달라서.
+3. What: `style.css`, `main.js`를 `css/style.css`, `js/main.js`로 수정. 초안은 폴더를 빼 실제 경로와 달랐고, 읽는 사람이 파일을 찾기 어려워서.
+4. How to Test: "마크다운 뷰어로 확인"을 "GitHub의 Files changed에서 README 렌더링 확인 + 각 경로가 실제 폴더에 있는지 대조"로 구체화. 검증 방법을 재현할 수 있게 하려고.
+5. 커밋 메시지: AI 초안 `docs: README에 프로젝트 파일 구조 설명 추가`를 그대로 사용.
+6. 결론: AI 초안은 구조(Why/What/How to Test)와 제목은 맞았고, 사실 정확도(파일 경로)와 문체·검증 구체성은 사람이 보정함.
+(https://github.com/soy7yos/B1-1/pull/1)
