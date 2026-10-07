@@ -1,9 +1,12 @@
-PS G:\내 드라이브\Codyssey\02_AI_Tools\B3-2> python format_output.py
->> python main.py commit
->> python main.py pr
+# cwd: B3-2
+$ python format_output.py
+$ python main.py commit
+$ python main.py pr
+
 [OK] format_output 검증 통과
 - commit 샘플 알림: ['제목이 72자를 넘어 잘랐습니다', '본문에 불릿(- )이 없습니다']
 - pr 샘플 알림: ['제목이 80자를 넘어 잘랐습니다', "'What' 섹션에 불릿이 없어 추가했습니다", "'How to Test' 섹션이 없어 추가했습니다"]
+
 [INFO] 현재 브랜치: feat/step-7
 [INFO] 변경 파일 3개, diff 45줄 수집
    M main.py
@@ -19,6 +22,7 @@ feat: 커밋 메시지 및 PR 출력 포맷팅 적용
 - 후처리 결과 및 경고(`notes`) 메시지 출력 로직을 추가함
 - `format_output.py` 및 관련 로그 파일 추가
 ----------------------
+
 [INFO] 현재 브랜치: feat/step-7
 [INFO] 변경 파일 3개, diff 45줄 수집
    M main.py

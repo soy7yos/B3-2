@@ -1,4 +1,6 @@
-sysy22042026@c6r1s1 B3-2 % python3 main.py pr
+# cwd: B3-2
+$ python3 main.py pr
+
 [INFO] 현재 브랜치: feat/step-6
 [INFO] 변경 파일 3개, diff 75줄 수집
    M main.py
@@ -24,7 +26,9 @@ feat: PR 초안 생성을 위한 전용 프롬프트 및 출력 형식 추가
 - 터미널에서 아래 명령어를 실행하여 PR 초안 생성 결과와 제목/본문 파싱 출력을 확인합니다.
   - `python main.py pr`
 ----------------
-sysy22042026@c6r1s1 B3-2 % python3 main.py pr --safe-mode
+
+$ python3 main.py pr --safe-mode
+
 [INFO] 현재 브랜치: feat/step-6
 [INFO] 변경 파일 3개, diff 75줄 수집
    M main.py

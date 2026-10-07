@@ -1,0 +1,26 @@
+보완: `git rev-parse` 확인을 없애고 `git status`의 returncode로 저장소 여부를 판정하도록 바꾼 뒤 재검증 (Windows, API 키 없음 상태라 AI 호출 없음)
+
+=== 1. git 저장소가 아닌 폴더 ===
+# cwd: (임시 폴더)
+$ python <B3-2 경로>/main.py commit
+
+[ERROR] git 저장소가 아닙니다. 변경 사항이 있는 git 프로젝트 폴더에서 실행하세요.
+exit=1
+
+=== 2. git 저장소 안 (변경 수집 후 키 없음 오류에서 종료) ===
+# cwd: B3-2
+$ python main.py commit
+
+[INFO] 현재 브랜치: main
+[INFO] 변경 파일 17개, diff 554줄 수집
+   M README.md
+   M format_output.py
+   M git_utils.py
+   M logs/step_10_bonus_pr.txt
+   M logs/step_11_bonus_convention.txt
+   M logs/step_12_bonus_safe_mode.txt
+   M logs/step_1_cli.txt
+(이하 파일 목록 생략)
+[ERROR] 환경변수 AI_API_KEY가 설정되지 않았습니다.
+예) export AI_API_KEY=발급받은키        (Mac/Linux)
+예) $env:AI_API_KEY="발급받은키"        (PowerShell)

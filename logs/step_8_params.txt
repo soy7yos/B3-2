@@ -26,6 +26,7 @@ assert is_retryable(503) == True
 assert is_retryable(400) == False
 ```
 ----------------
+
 === pr --temperature 0 --max-tokens 1024 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -53,6 +54,7 @@ print(is_retryable(503))  # True
 print(is_retryable(400))  # False
 ```
 ----------------
+
 === pr --temperature 1 --max-tokens 1024 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -80,6 +82,7 @@ assert is_retryable(503) == True
 assert is_retryable(400) == False
 ```
 ----------------
+
 === pr --temperature 1 --max-tokens 1024 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -102,6 +105,7 @@ feat: AI API 호출을 위한 재시도 가능 상태 코드 확인 함수 추�
 - Python 인터프리터나 테스트 스크립트에서 함수를 임포트하여 확인합니다.
 - `python -c "from ai_client import is_retryable; print(is_retryable(429)); print(is_retryable(200))"` 실행 시 `True`, `False`가 출력되는지 확인합니다.
 ----------------
+
 === pr --temperature 2 --max-tokens 1024 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -127,6 +131,7 @@ print(is_retryable(429))  # True
 print(is_retryable(200))  # False
 ```
 ----------------
+
 === pr --temperature 2 --max-tokens 1024 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -149,6 +154,7 @@ fix: AI 응답 실패 시 재시도 가능 여부 판단 함수 추가
 - `python -c "from ai_client import is_retryable; print(is_retryable(429)); print(is_retryable(200))"`
 - `429`, `500`, `503` 입력 시 `True`를 반환하고, 그 외의 상태 코드 입력 시 `False`를 반환하는지 확인합니다.
 ----------------
+
 === pr --temperature 0.3 --max-tokens 64 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -172,6 +178,7 @@ feat: AI 클라이언트에 재시도 가능 여부 판단 함수 추가
 ----------------
 [WARN] 'What' 섹션에 불릿이 없어 추가했습니다
 [WARN] 'How to Test' 섹션이 없어 추가했습니다
+
 === pr --temperature 0.3 --max-tokens 256 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집
@@ -200,6 +207,7 @@ print(is_retryable(503))  # True
 print(is_retryable(400))  # False
 ```
 ----------------
+
 === pr --temperature 0.3 --max-tokens 1024 ===
 [INFO] 현재 브랜치: feat/step-8
 [INFO] 변경 파일 1개, diff 15줄 수집

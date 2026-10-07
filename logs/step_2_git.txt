@@ -1,9 +1,15 @@
-sysy22042026@c6r1s1 B3-2 % python3 main.py commit
+# cwd: B3-2
+$ python3 main.py commit
+
 [INFO] 현재 브랜치: feat/step-2
 [INFO] 변경 파일 2개, diff 38줄 수집
    M main.py
   ?? git_utils.py
-sysy22042026@c6r1s1 B3-2 % cd "$(mktemp -d)" && python3 /Users/sysy22042026/B3-2/main.py commit; cd /Users/sysy22042026/B3-2
+
+$ cd "$(mktemp -d)" && python3 ~/B3-2/main.py commit; cd ~/B3-2
+
 [ERROR] git 저장소가 아닙니다. 변경 사항이 있는 git 프로젝트 폴더에서 실행하세요.
-sysy22042026@c6r1s1 B3-2 % python3 main.py commit
+
+$ python3 main.py commit
+
 [INFO] 변경 사항이 없습니다. 파일을 수정한 뒤 다시 실행하세요.

@@ -1,9 +1,11 @@
-PS G:\내 드라이브\Codyssey\02_AI_Tools\B3-2> python --version
->> $env:AI_API_KEY="***"
->> python main.py --help
->> python main.py commit
->> python main.py pr
->> python main.py commit --safe-mode
+# cwd: B3-2
+$ python --version
+$ $env:AI_API_KEY="***"
+$ python main.py --help
+$ python main.py commit
+$ python main.py pr
+$ python main.py commit --safe-mode
+
 Python 3.14.4
 usage: main.py [-h] {commit,pr} ...
 
@@ -16,6 +18,7 @@ positional arguments:
 
 options:
   -h, --help   show this help message and exit
+
 [INFO] 현재 브랜치: feat/step-9
 [INFO] 변경 파일 1개, diff 0줄 수집
   ?? README.md
@@ -27,6 +30,7 @@ docs: README.md 파일 추가
 
 - 프로젝트 설명을 위한 README.md 파일 생성
 ----------------------
+
 [INFO] 현재 브랜치: feat/step-9
 [INFO] 변경 파일 1개, diff 0줄 수집
   ?? README.md
@@ -47,6 +51,7 @@ docs: README.md 파일 생성
 - 프로젝트 루트 디렉터리에 `README.md` 파일이 정상적으로 생성되었는지 확인한다.
 - `cat README.md` 명령어로 내용을 확인한다.
 ----------------
+
 [INFO] 현재 브랜치: feat/step-9
 [INFO] 변경 파일 1개, diff 0줄 수집
   ?? README.md

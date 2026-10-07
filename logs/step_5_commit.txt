@@ -1,4 +1,6 @@
-sysy22042026@c6r1s1 B3-2 % python3 main.py commit
+# cwd: B3-2
+$ python3 main.py commit
+
 [INFO] 현재 브랜치: feat/step-5
 [INFO] 변경 파일 3개, diff 41줄 수집
    M main.py
@@ -14,7 +16,9 @@ feat: 커밋 메시지 전용 프롬프트 및 출력 형식 추가
 - main.py에서 커밋 명령 수행 시 전용 프롬프트를 사용하도록 분기 처리
 - 커밋 메시지 출력 시 시각적 구분을 위한 포맷 적용
 ----------------------
-sysy22042026@c6r1s1 B3-2 % python3 main.py commit --safe-mode
+
+$ python3 main.py commit --safe-mode
+
 [INFO] 현재 브랜치: feat/step-5
 [INFO] 변경 파일 3개, diff 41줄 수집
    M main.py

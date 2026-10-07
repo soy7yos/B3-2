@@ -137,7 +137,7 @@ diff는 그대로 외부 AI 서버로 전송됩니다. 코드에 비밀값이 �
 
 ## 팀 컨벤션
 
-이전 미션 repo [`B1-1`](https://github.com/soy7yos/B1-1)의 커밋 이력 42개와 PR #1을 보고 스타일을 정리해 [`conventions/b1-1.txt`](conventions/b1-1.txt)로 만들었습니다.
+이전 미션 repo [`B1-1`](https://github.com/soy7yos/B1-1)의 커밋 이력 42개와 [PR #1](https://github.com/soy7yos/B1-1/pull/1)을 보고 스타일을 정리해 [`conventions/b1-1.txt`](conventions/b1-1.txt)로 만들었습니다.
 
 | 항목 | B1-1에서 확인한 것 | 컨벤션 규칙 |
 |---|---|---|
@@ -183,7 +183,7 @@ python main.py pr --convention conventions/b1-1.txt
 - **마스킹을 수집 직후에**: 이후 어떤 코드도 원문 diff를 만지지 못하게 해 유출 경로를 줄입니다.
 - **후처리(재생성 아님)**: 규칙을 어긴 응답을 다시 요청하면 호출이 2회가 됩니다. 코드로 고치면 호출은 1회이고, 결과가 매번 같아 검증하기 쉽습니다.
 - **`temperature` 0.3**: 커밋 메시지는 창의성보다 일관성이 중요해 낮게 뒀습니다.
-- **`max-tokens` 512**: 초안은 짧습니다. 다만 모델의 생각(thinking) 토큰도 이 상한에 포함되므로, 64처럼 너무 작게 주면 본문이 잘립니다(실험으로 확인, 아래 표).
+- **`max-tokens` 512**: 초안은 짧습니다. 다만 모델의 생각(thinking) 토큰도 이 상한에 포함되므로, 64처럼 너무 작게 주면 본문이 잘립니다(실험으로 확인, 아래 "파라미터 실험 요약").
 - **기본 모델 `gemini-3.5-flash-lite`**: 2.5 계열은 신규 키 접근이 제한되고, 3 Flash는 프리뷰에 무료 한도가 작습니다.
 
 ## 검증 기록 (`logs/`)
@@ -194,12 +194,18 @@ python main.py pr --convention conventions/b1-1.txt
 |---|---|
 | `step_1_cli.txt` | `--help`, `commit` 인자 파싱·기본값 |
 | `step_2_git.txt` | 변경 있음/없음, 저장소 아님 처리 |
+| `step_2_git_supplement_log.txt` | 보완: 저장소 판정을 `git status` 결과로 바꾼 뒤 저장소 아님/안 재검증 |
 | `step_3_safe_mode.txt` | 가짜 키·이메일 diff의 ON/OFF 비교 |
 | `step_4_api.txt` | 키 없음·틀린 키·정상 호출 |
 | `step_5_commit.txt` | 제목 1줄 + 본문 불릿 |
 | `step_6_pr.txt` | Why/What/How to Test 세 섹션, safe-mode 병행 |
 | `step_7_format.txt` | 규칙 위반 샘플 후처리, 실제 실행 |
 | `step_8_params.txt` | temperature·max-tokens 값별 비교(9회 실행) |
+| `step_9_readme.txt` | README 순서대로 새 터미널에서 `--help`·`commit`·`pr`·`commit --safe-mode` 실행, GitHub 렌더링 캡처 `step_9_01_github_readme.png` |
+| `step_10_bonus_pr.txt` | 보너스 1: B1-1에서 이 도구로 `commit`·`pr` 초안을 받아 만든 [PR #1](https://github.com/soy7yos/B1-1/pull/1), AI 초안 → 최종 변경점 6줄, 캡처 `step_10_01_pr_page.png` |
 | `step_11_bonus_convention.txt` | 컨벤션 적용 전/후 commit·pr 비교, 없는 파일 오류 |
+| `step_12_bonus_safe_mode.txt` | 보너스 3: 마스킹 자체 점검 OFF/ON(4건), `commit` OFF vs `--safe-mode --max-files 1 --max-lines 8` ON(파일 1개·8줄 생략, 2건 마스킹) 비교 |
+
+> `step_1`~`6`은 Mac(zsh), `step_7`~`12`는 Windows(PowerShell)에서 기록했습니다. 프롬프트 표기가 달라 모든 로그를 `# cwd:`(실행 폴더) + `$ 명령` 형태로 통일했고, 명령 묶음과 출력 사이에는 빈 줄을 넣어 읽기 쉽게 했습니다. 출력 내용은 그대로입니다. 단계별로 남긴 로그라서 `step_1`의 기본 모델(`gemini-2.5-flash`)처럼 당시 값이 그대로 있고, 현재 기본값은 위 옵션 표를 따릅니다.
 
 **파라미터 실험 요약** — 같은 diff로 `pr`을 9회 실행했습니다(temperature 0·1·2 각 2회 @max-tokens 1024, max-tokens 64·256·1024 @temperature 0.3). max-tokens 64에서는 본문이 잘려 후처리가 자리표시자로 채우고 `[WARN]`을 냈고, 256 이상은 정상이었습니다. temperature 간 차이는 `step_8_params.txt`에서 직접 비교할 수 있습니다.

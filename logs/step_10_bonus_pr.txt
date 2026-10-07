@@ -1,5 +1,7 @@
-PS G:\내 드라이브\Codyssey\02_AI_Tools\B1-1> python ../B3-2/main.py commit
->> python ../B3-2/main.py pr
+# cwd: B1-1
+$ python ../B3-2/main.py commit
+$ python ../B3-2/main.py pr
+
 [INFO] 현재 브랜치: docs/readme-structure
 [INFO] 변경 파일 1개, diff 18줄 수집
   M  README.md
@@ -11,6 +13,7 @@ docs: README에 프로젝트 파일 구조 설명 추가
 
 - README.md 파일에 주요 파일 및 디렉토리 구조 설명 추가
 ----------------------
+
 [INFO] 현재 브랜치: docs/readme-structure
 [INFO] 변경 파일 1개, diff 18줄 수집
   M  README.md

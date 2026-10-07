@@ -18,6 +18,7 @@ feat: 팀 컨벤션 파일을 읽어 프롬프트에 적용하는 기능 추가
 
 === [후] commit - --convention conventions/b1-1.txt ===
 [INFO] 컨벤션 적용: conventions/b1-1.txt
+
 [INFO] 현재 브랜치: feat/step-11
 [INFO] 변경 파일 4개, diff 79줄 수집
    A conventions/b1-1.txt
@@ -68,6 +69,7 @@ feat: 외부 텍스트 파일 기반의 팀 컨벤션 주입 기능 추가
 
 === [후] pr - --convention conventions/b1-1.txt ===
 [INFO] 컨벤션 적용: conventions/b1-1.txt
+
 [INFO] 현재 브랜치: feat/step-11
 [INFO] 변경 파일 4개, diff 79줄 수집
    A conventions/b1-1.txt

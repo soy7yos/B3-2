@@ -1,4 +1,6 @@
-sysy22042026@c6r1s1 B3-2 % python3 main.py --help      
+# cwd: B3-2
+$ python3 main.py --help
+
 usage: main.py [-h] {commit,pr} ...
 
 AI 커밋 메시지 / PR 초안 도우미
@@ -10,7 +12,9 @@ positional arguments:
 
 optional arguments:
   -h, --help   show this help message and exit
-sysy22042026@c6r1s1 B3-2 % python3 main.py commit --help
+
+$ python3 main.py commit --help
+
 usage: main.py commit [-h] [--model MODEL] [--temperature TEMPERATURE] [--max-tokens MAX_TOKENS]
                       [--safe-mode]
 
@@ -22,10 +26,16 @@ optional arguments:
   --max-tokens MAX_TOKENS
                         응답 최대 토큰 수 (기본: 512)
   --safe-mode           diff의 API 키·이메일·전화번호를 마스킹해서 전송
-sysy22042026@c6r1s1 B3-2 % python3 main.py commit       
+
+$ python3 main.py commit
+
 command=commit model=gemini-2.5-flash temperature=0.3 max_tokens=512 safe_mode=False
-sysy22042026@c6r1s1 B3-2 % python3 main.py pr --temperature 0.7 --max-tokens 800 --safe-mode
+
+$ python3 main.py pr --temperature 0.7 --max-tokens 800 --safe-mode
+
 command=pr model=gemini-2.5-flash temperature=0.7 max_tokens=800 safe_mode=True
-sysy22042026@c6r1s1 B3-2 % python3 main.py                                                     
+
+$ python3 main.py
+
 usage: main.py [-h] {commit,pr} ...
 main.py: error: the following arguments are required: {commit,pr}
