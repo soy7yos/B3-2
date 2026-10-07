@@ -3,6 +3,7 @@ import sys
 
 from ai_client import AIError, call_ai, load_api_key
 from git_utils import GitError, collect_changes
+from format_output import format_commit, format_pr
 from prompts import COMMIT_PROMPT, PR_PROMPT
 from safe_mode import mask_sensitive
 
@@ -68,21 +69,27 @@ def main():
         print(f"[ERROR] {e}", file=sys.stderr)
         sys.exit(1)
 
+    # 왜: 후처리는 AI 응답 직후, 출력 직전 한 곳에서만 한다. 출력되는 텍스트는 항상 검증을 통과한 것이다.
     if args.command == "commit":
+        message, notes = format_commit(result)
         print("[DONE] 커밋 메시지 생성 완료\n")
-        # 왜: 구분선으로 결과 영역을 나눠 복사할 범위를 분명히 한다. 정식 포맷 검증·구획은 7단계에서 한다.
+        # 왜: 구분선으로 결과 영역을 나눠 복사할 범위를 분명히 한다 (§4-5 구획 출력)
         print("--- Commit Message ---")
-        print(result)
+        print(message)
         print("----------------------")
     else:
+        title, body, notes = format_pr(result)
         print("[DONE] PR 초안 생성 완료\n")
-        # 왜: PR은 제목 1줄 + 본문이라 구획을 둘로 나눈다. 첫 줄바꿈 기준 분리는 프롬프트가 "첫 줄=제목"을 강제하기 때문이다. 어긋났을 때의 검증·보정은 7단계에서 한다.
-        title, _, body = result.strip().partition("\n")
+        # 왜: PR은 제목 1줄 + 본문이라 구획을 둘로 나눈다.
         print("--- PR Title ---")
         print(title)
         print("\n--- PR Body ---")
-        print(body.strip())
+        print(body)
         print("----------------")
+        
+    # 왜: 후처리로 바뀐 점은 구획 밖에 알린다. 복사할 결과물에 경고 문구가 섞이면 안 된다.
+    for note in notes:
+        print(f"[WARN] {note}")
 
 
 if __name__ == "__main__":

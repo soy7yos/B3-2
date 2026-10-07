@@ -1,0 +1,47 @@
+PS G:\내 드라이브\Codyssey\02_AI_Tools\B3-2> python format_output.py
+>> python main.py commit
+>> python main.py pr
+[OK] format_output 검증 통과
+- commit 샘플 알림: ['제목이 72자를 넘어 잘랐습니다', '본문에 불릿(- )이 없습니다']
+- pr 샘플 알림: ['제목이 80자를 넘어 잘랐습니다', "'What' 섹션에 불릿이 없어 추가했습니다", "'How to Test' 섹션이 없어 추가했습니다"]
+[INFO] 현재 브랜치: feat/step-7
+[INFO] 변경 파일 3개, diff 45줄 수집
+   M main.py
+  ?? format_output.py
+  ?? logs/step_7_format.txt
+[INFO] AI API 호출 1회
+[DONE] 커밋 메시지 생성 완료
+
+--- Commit Message ---
+feat: 커밋 메시지 및 PR 출력 포맷팅 적용
+
+- main.py에 `format_output.py` 모듈을 연동하여 커밋과 PR의 출력 포맷을 개선함
+- 후처리 결과 및 경고(`notes`) 메시지 출력 로직을 추가함
+- `format_output.py` 및 관련 로그 파일 추가
+----------------------
+[INFO] 현재 브랜치: feat/step-7
+[INFO] 변경 파일 3개, diff 45줄 수집
+   M main.py
+  ?? format_output.py
+  ?? logs/step_7_format.txt
+[INFO] AI API 호출 1회
+[DONE] PR 초안 생성 완료
+
+--- PR Title ---
+refactor: AI 응답 후처리를 위한 format_output 모듈 분리 및 적용
+
+--- PR Body ---
+## Why
+- AI가 생성한 커밋 메시지와 PR 초안의 출력 포맷 검증 및 후처리 로직을 분리하여 코드의 응집도와 가독성을 높이고자 함
+- 출력 결과물에 경고 문구가 직접 섞이지 않도록 분리된 경고 시스템을 도입할 필요가 있음
+
+## What
+- `format_output.py` 새 모듈을 추가하여 커밋 및 PR 결과물 포맷팅 함수(`format_commit`, `format_pr`) 구현
+- `main.py`에 새 포맷팅 함수를 적용하고, 후처리 과정에서 발생한 경고(`notes`)를 별도로 출력하도록 로직 수정
+
+## How to Test
+- 아래 명령어로 커밋 메시지 생성 기능을 실행하여 포맷이 정상 출력되는지 확인
+`python main.py commit`
+- 아래 명령어로 PR 초안 생성 기능을 실행하여 제목과 본문이 올바르게 분리되어 출력되는지 확인
+`python main.py pr`
+----------------
