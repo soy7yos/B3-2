@@ -1,0 +1,48 @@
+정책: 마스킹 6종(API키·JWT·비밀값·이메일·주민번호·전화번호), 전송 제한 기본 10파일/200줄(--max-files, --max-lines로 조정)
+
+=== 1. python safe_mode.py (자체 점검) ===
+--- OFF (원문) ---
++API_KEY = "AIzaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
++# 문의: dev.kim@example.com, 010-1234-5678, 02-123-4567
++def add(a, b): return a + b
+
+--- ON (마스킹 4건) ---
++API_KEY = "[MASKED_API_KEY]"
++# 문의: [MASKED_EMAIL], [MASKED_PHONE], [MASKED_PHONE]
++def add(a, b): return a + b
+
+OK
+
+=== 2. python main.py commit (OFF) ===
+[INFO] 현재 브랜치: feat/step-12
+[INFO] 변경 파일 3개, diff 33줄 수집
+  A  demo_a.py
+  A  demo_b.py
+  ?? logs/step_12_bonus_safe_mode.txt
+[INFO] AI API 호출 1회
+[DONE] 커밋 메시지 생성 완료
+
+--- Commit Message ---
+feat: 데모용 스크립트 파일 추가
+
+- demo_a.py 파일 생성
+- demo_b.py 파일 생성
+----------------------
+
+=== 3. python main.py commit --safe-mode --max-files 1 --max-lines 8 (ON) ===
+[INFO] 현재 브랜치: feat/step-12
+[INFO] 변경 파일 3개, diff 33줄 수집
+  A  demo_a.py
+  A  demo_b.py
+  ?? logs/step_12_bonus_safe_mode.txt
+[INFO] safe-mode 제한: 파일 1개·8줄 생략 (최대 1파일/8줄)
+[INFO] safe-mode ON: 민감정보 2건 마스킹
+[INFO] AI API 호출 1회
+[DONE] 커밋 메시지 생성 완료
+
+--- Commit Message ---
+feat: demo_a.py 및 demo_b.py 파일 추가
+
+- 새 기능 테스트를 위한 demo_a.py 파일 생성
+- 보조 데모 스크립트 demo_b.py 파일 생성
+----------------------
