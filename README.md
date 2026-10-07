@@ -44,6 +44,7 @@ python main.py --help        # 전체 옵션
 | `--temperature` | `0.3` | 출력 다양성(0.0~2.0). 낮을수록 일관됨 |
 | `--max-tokens` | `512` | 응답 최대 토큰. 너무 작으면 답이 잘림 |
 | `--safe-mode` | 꺼짐 | diff의 API 키·이메일·전화번호를 가려서 전송 |
+| `--convention` | 없음 | 팀 컨벤션 텍스트 파일. 프롬프트에 추가 규칙으로 포함([팀 컨벤션](#팀-컨벤션) 참고) |
 
 ```bash
 python main.py commit --temperature 0.7 --max-tokens 1024
@@ -118,11 +119,44 @@ diff는 그대로 외부 AI 서버로 전송됩니다. 코드에 API 키·이메
 | 키 없음 | 호출 전에 설정 예시와 함께 종료 |
 | 틀린 키·한도 초과·서버·네트워크·시간 초과 | 원인을 구분한 `[ERROR]` 메시지 |
 
+## 팀 컨벤션
+
+이전 미션 repo [`B1-1`](https://github.com/soy7yos/B1-1)의 커밋 이력 42개와 PR #1을 보고 스타일을 정리해 [`conventions/b1-1.txt`](conventions/b1-1.txt)로 만들었습니다.
+
+| 항목 | B1-1에서 확인한 것 | 컨벤션 규칙 |
+|---|---|---|
+| prefix | docs 18 · feat 9 · fix 5 · chore 5 · style 3 · content 2 | 6종만 사용 (기본 프롬프트는 5종) |
+| 스코프 | 없음 (`docs: ...`) | 쓰지 않음 |
+| 제목 | `추가`·`수정`·`교체`·`정리` 명사형, 백틱 없음 | 같은 형태로, 제목에 백틱 금지 |
+| 본문 | 대부분 없음, 있으면 `- ` 불릿 | 이 도구는 §4-3 명세상 본문 필수라 항상 불릿 1~3개 (fix는 무엇이 왜 문제였는지 포함) |
+| PR 어투 | PR #1 What·How to Test가 `~했습니다`·`~합니다` | 존댓말, 파일·명령어는 백틱 |
+
+**사용법**
+
+```bash
+python main.py commit --convention conventions/b1-1.txt
+python main.py pr --convention conventions/b1-1.txt
+```
+
+파일 내용이 프롬프트에 "팀 컨벤션" 블록으로 들어가고, 기본 규칙과 충돌하면 컨벤션을 따르게 했습니다. 파일을 못 읽으면 API 호출 전에 `[ERROR]`로 종료합니다. 컨벤션으로 못 바꾸는 것도 있습니다. PR 섹션 이름·순서(Why/What/How to Test)와 제목 길이 제한은 명세(§4-4·§4-5)라 후처리가 항상 강제합니다.
+
+**적용 전/후 비교** — 같은 diff, `--temperature 0`으로 1회씩 실행했습니다(`logs/step_11_bonus_convention.txt`).
+
+| | 적용 전 | 적용 후 |
+|---|---|---|
+| commit 제목 | `feat: 팀 컨벤션 파일을 읽어 프롬프트에 적용하는 기능 추가` | `feat: 외부 팀 컨벤션 파일 읽기 기능 추가` |
+| commit 본문 | 불릿 3개 | 불릿 3개 |
+| PR 제목 | `feat: 외부 텍스트 파일 기반의 팀 컨벤션 주입 기능 추가` | `feat: 팀 컨벤션 파일을 읽어 프롬프트에 주입하는 기능 추가` |
+| PR Why | 불릿 2개 (`~하기 위함입니다`) | 불릿 1개 (`~필요합니다`) |
+| PR How to Test | 명령 2개(적용 확인 + 없는 파일 오류 확인), 명령이 불릿 없는 줄 | 명령 1개, 명령이 `- ` 불릿 안에 있음 |
+
+두 결과 모두 규칙 위반과 `[WARN]` 없이 통과했고 차이는 크지 않습니다. 이 diff는 코드 변경이라 `style`·`content` prefix가 쓰일 상황이 아니었고, B1-1 스타일이 기본 프롬프트와 이미 비슷했기 때문으로 보입니다(추정). 컨벤션을 처음 만들었을 때는 "본문은 필요할 때만"이라는 B1-1 관찰을 그대로 옮겨 본문이 사라지고 `[WARN]`이 났고, 명세가 우선이라 위 표처럼 고쳤습니다.
+
 ## 구현 기능
 
 - `git status`·`git diff HEAD` 수집(`git_utils.py`)
 - Gemini REST 호출과 예외 구분(`ai_client.py`)
-- 커밋/PR 프롬프트(`prompts.py`), safe-mode 마스킹(`safe_mode.py`)
+- 커밋/PR 프롬프트(`prompts.py`), safe-mode 마스킹(`safe_mode.py`), 팀 컨벤션 파일 적용(`--convention`)
 - 길이·섹션·불릿 검증 후처리(`format_output.py`): 커밋 제목 50자 이내 권장·72자 초과 시 자름, PR 제목 80자 제한, Why/What/How to Test 순서 재조립, 빠진 섹션·불릿은 자리표시자로 채움
 
 ## 설계 선택: 왜 이렇게 했나
@@ -150,5 +184,6 @@ diff는 그대로 외부 AI 서버로 전송됩니다. 코드에 API 키·이메
 | `step_6_pr.txt` | Why/What/How to Test 세 섹션, safe-mode 병행 |
 | `step_7_format.txt` | 규칙 위반 샘플 후처리, 실제 실행 |
 | `step_8_params.txt` | temperature·max-tokens 값별 비교(9회 실행) |
+| `step_11_bonus_convention.txt` | 컨벤션 적용 전/후 commit·pr 비교, 없는 파일 오류 |
 
 **파라미터 실험 요약** — 같은 diff로 `pr`을 9회 실행했습니다(temperature 0·1·2 각 2회 @max-tokens 1024, max-tokens 64·256·1024 @temperature 0.3). max-tokens 64에서는 본문이 잘려 후처리가 자리표시자로 채우고 `[WARN]`을 냈고, 256 이상은 정상이었습니다. temperature 간 차이는 `step_8_params.txt`에서 직접 비교할 수 있습니다.

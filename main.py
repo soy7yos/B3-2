@@ -25,6 +25,9 @@ def build_parser():
     # 왜: 결정대로 기본 OFF, 플래그를 주면 ON. store_true가 그 의미와 맞는다.
     common.add_argument("--safe-mode", action="store_true",
                         help="diff의 API 키·이메일·전화번호를 마스킹해서 전송")
+    # 왜: 컨벤션을 코드가 아닌 텍스트 파일로 받으면 팀마다 파일만 바꿔 끼우면 된다. yaml은 외부 라이브러리라 표준 라이브러리 텍스트 읽기로 충분하다.
+    common.add_argument("--convention", metavar="FILE",
+                        help="팀 컨벤션 텍스트 파일 (프롬프트에 추가 규칙으로 포함)")
 
     parser = argparse.ArgumentParser(prog="main.py", description="AI 커밋 메시지 / PR 초안 도우미")
     # 왜: required=True로 명령 없이 실행하면 argparse가 사용법과 함께 오류를 내준다.
@@ -36,6 +39,18 @@ def build_parser():
 
 def main():
     args = build_parser().parse_args()
+    convention = ""
+    if args.convention:
+        # 왜: 파일 오류는 git 수집·API 호출 전에 걸러 쓸데없는 호출을 막는다.
+        try:
+            with open(args.convention, encoding="utf-8") as f:
+                text = f.read().strip()
+        except OSError as e:
+            print(f"[ERROR] 컨벤션 파일을 읽을 수 없습니다: {e}", file=sys.stderr)
+            sys.exit(1)
+        # 왜: 기본 규칙과 충돌하면 컨벤션을 따르게 해야 '적용 전/후' 차이가 생긴다.
+        convention = f"[팀 컨벤션 - 위 규칙과 충돌하면 이쪽을 따른다]\n{text}\n\n"
+        print(f"[INFO] 컨벤션 적용: {args.convention}")
     try:
         branch, files, diff = collect_changes()
     except GitError as e:
@@ -61,9 +76,9 @@ def main():
         api_key = load_api_key()
         # 왜: commit과 pr이 수집·마스킹·호출 경로를 공유하고 프롬프트만 갈린다.
         if args.command == "commit":
-            prompt = COMMIT_PROMPT.format(files="\n".join(files), diff=diff)
+            prompt = COMMIT_PROMPT.format(files="\n".join(files), diff=diff, convention=convention)
         else:
-            prompt = PR_PROMPT.format(files="\n".join(files), diff=diff)
+            prompt = PR_PROMPT.format(files="\n".join(files), diff=diff, convention=convention)
         result = call_ai(prompt, api_key, args.model, args.temperature, args.max_tokens)
     except AIError as e:
         print(f"[ERROR] {e}", file=sys.stderr)
